@@ -1,0 +1,16 @@
+{
+  "name": "Authenticator App",
+  "short_name": "Auth",
+  "description": "Decode QRCode, and generate one time password codes",
+  "display": "standalone",
+  "theme_color": "#fff",
+  "background_color": "#fff",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
