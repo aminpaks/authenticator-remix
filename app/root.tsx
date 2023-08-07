@@ -1,19 +1,32 @@
 import polaris from '@shopify/polaris/build/esm/styles.css';
-import {cssBundleHref} from '@remix-run/css-bundle';
-import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from '@remix-run/react';
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  type HtmlLinkDescriptor,
+} from '@remix-run/react';
 import type {LinksFunction} from '@remix-run/node';
 
-import {ThemeProvider} from './components/ThemeProvider';
+import {ThemeProvider} from '~/components/ThemeProvider';
+import {globalTitle} from '~/constant';
 
-export const links: LinksFunction = () => [
+const linkDefinitions: HtmlLinkDescriptor[] = [
   {rel: 'stylesheet', href: polaris},
-  ...(cssBundleHref ? [{rel: 'stylesheet', href: cssBundleHref}] : []),
+  {rel: 'manifest', href: '/manifest.json'},
+  {rel: 'icon', href: '/favicon.ico'},
+  {rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180'},
+  {rel: 'icon', type: 'image/png', href: '/icon-16x16.png', sizes: '16x16'},
+  {rel: 'icon', type: 'image/png', href: '/icon-32x32.png', sizes: '32x32'},
 ];
+export const links: LinksFunction = () => linkDefinitions;
 
 export function meta() {
   return [
     {charset: 'utf-8'},
-    {title: 'Authenticator'},
+    {title: globalTitle},
     {viewport: 'width=device-width,initial-scale=1'},
   ];
 }

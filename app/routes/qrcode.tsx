@@ -1,6 +1,6 @@
+import type {V2_MetaFunction} from '@remix-run/node';
 import {Page, Text} from '@shopify/polaris';
 import {globalTitle} from '~/constant';
-import type {V2_MetaFunction} from '@remix-run/node';
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -16,7 +16,7 @@ export const meta: V2_MetaFunction = () => {
 
 export default function Index() {
   return (
-    <Page title="Two-step Auth QRCode Decoder">
+    <Page title="Two-step Authentication QRCode Decoder">
       <Text as="h2">Welcome!</Text>
     </Page>
   );

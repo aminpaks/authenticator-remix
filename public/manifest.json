@@ -1,7 +1,7 @@
 {
   "name": "Authenticator App",
   "short_name": "Auth",
-  "description": "Decode QRCode, and generate one time password codes",
+  "description": "Decode QRCodes, and generate one time password code",
   "display": "standalone",
   "theme_color": "#fff",
   "background_color": "#fff",
