@@ -42,7 +42,7 @@ export default function Index() {
         .reverse()
         .map((file) => {
           const id = getRandomName();
-          formData.append('file', file, id);
+          formData.append('qrCode', file, id);
           return {
             id,
             file,
@@ -110,7 +110,7 @@ export default function Index() {
         <LegacyStack vertical>
           <DropZone accept=".png,.jpg,.jpeg,.gif" onDrop={handleDropZoneDrop}>
             <DropZone.FileUpload
-              actionHint="Drag, and drop or click to process images"
+              actionHint="Drag, and drop or click to process images. Only PNG, JPG, GIF are supported, each max 500 KB"
               actionTitle="Add QRCode image"
             />
           </DropZone>

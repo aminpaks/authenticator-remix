@@ -6,7 +6,6 @@ import {pipe} from 'fp-ts/function';
 import {Decoder} from '@nuintun/qrcode';
 
 import {withReason, type Failure, failureFrom} from '~/utils';
-import type {UploadFile} from './parse-request-form';
 
 const decoder = new Decoder();
 type Jimp = Awaited<ReturnType<typeof jimp.read>>;
@@ -29,16 +28,22 @@ export enum QRCodeFailure {
 }
 
 const decodeQrCode = (
-  file: UploadFile,
+  file: File,
 ): TaskEither.TaskEither<Failure<DecodeQRCodeFailure>, DecodedQRCode> =>
   pipe(
-    file.filename,
+    file.name,
     TaskEither.fromNullable(failureFrom({failure: QRCodeFailure.WithNoFileName, filename: null})),
     TaskEither.chain((filename) =>
       pipe(
         TaskEither.tryCatch(
-          () => jimp.read(Buffer.from(file.buff)),
+          () => file.arrayBuffer(),
           withReason({failure: QRCodeFailure.CannotReadFile, filename}),
+        ),
+        TaskEither.chain((arrayBuffer) =>
+          TaskEither.tryCatch(
+            () => jimp.read(Buffer.from(arrayBuffer)),
+            withReason({failure: QRCodeFailure.CannotReadFile, filename}),
+          ),
         ),
         Task.map((eitherImage) =>
           pipe(
@@ -95,7 +100,7 @@ const decodeQrCode = (
   );
 
 export function decodeQrCodes(
-  files: UploadFile[],
+  files: File[],
 ): Task.Task<readonly Either.Either<Failure<DecodeQRCodeFailure>, DecodedQRCode>[]> {
   return pipe(files, Task.traverseArray(decodeQrCode));
 }
