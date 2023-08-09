@@ -76,7 +76,6 @@ const decodeQrCode = (
                 ),
                 Either.chain(
                   ({data}): Either.Either<Failure<DecodeQRCodeFailure>, DecodedQRCode> => {
-                    console.log(data);
                     const params = new URLSearchParams(data.split('?').at(-1) ?? '');
                     const secret = params.get('secret');
                     if (!secret) {
@@ -106,7 +105,7 @@ export function mapQRCodeFailures(error: QRCodeFailure): string {
     case QRCodeFailure.CannotReadFile:
       return 'Cannot read the file!';
     case QRCodeFailure.CannotDecodeImage:
-      return 'Cannot decode the image!';
+      return 'Cannot decode QRCode!';
     case QRCodeFailure.CannotFindSecret:
       return 'Cannot find the secret!';
     case QRCodeFailure.CannotModifyImage:

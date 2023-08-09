@@ -45,11 +45,9 @@ export async function parseUploadForm(req: any): Promise<UploadFile[]> {
       return [];
     }
     const parts = streamMultipart(req.body, boundary);
-    console.log({boundary, parts});
 
     const files: UploadFile[] = [];
     for await (const part of parts) {
-      console.log({part});
       if (part.done) {
         break;
       }

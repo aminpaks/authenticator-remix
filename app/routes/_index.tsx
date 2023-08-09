@@ -1,4 +1,5 @@
 import {pipe} from 'fp-ts/function';
+import * as Eq from 'fp-ts/Eq';
 import * as Array from 'fp-ts/Array';
 import * as Identity from 'fp-ts/Identity';
 import * as Option from 'fp-ts/Option';
@@ -12,6 +13,9 @@ import {UploadFiles, type UploadFile} from '~/components';
 import {getRandomName, actionDecodeSecret, mapQRCodeFailures} from '~/utils';
 
 export {actionDecodeSecret as action};
+
+const uploadFileEq = Eq.fromEquals<UploadFile>((a, b) => a.id === b.id);
+const stateSemigroup = Array.getUnionSemigroup<UploadFile>(uploadFileEq);
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -95,8 +99,7 @@ export default function Index() {
           ),
           Option.getOrElse(() => state),
         );
-        console.log({newState});
-        return newState;
+        return stateSemigroup.concat(newState, state);
       });
     }
   }, [fetcher.data]);
