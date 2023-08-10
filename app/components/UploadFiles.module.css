@@ -1,0 +1,16 @@
+.UploadFile {
+  height: auto;
+  max-height: 0;
+  overflow: hidden;
+  animation: slide 500ms forwards;
+  animation-delay: 0s;
+}
+
+
+@-webkit-keyframes slide {
+  100% { max-height: 100px; }
+}
+
+@keyframes slide {
+  100% { max-height: 100px; }
+}

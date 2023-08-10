@@ -1,3 +1,4 @@
+import {cssBundleHref} from '@remix-run/css-bundle';
 import polaris from '@shopify/polaris/build/esm/styles.css';
 import {
   Links,
@@ -21,7 +22,8 @@ const linkDefinitions: HtmlLinkDescriptor[] = [
   {rel: 'icon', type: 'image/png', href: '/icon-16x16.png', sizes: '16x16'},
   {rel: 'icon', type: 'image/png', href: '/icon-32x32.png', sizes: '32x32'},
 ];
-export const links: LinksFunction = () => linkDefinitions;
+export const links: LinksFunction = () =>
+  linkDefinitions.concat(...(cssBundleHref ? [{rel: 'stylesheet', href: cssBundleHref}] : []));
 
 export function meta() {
   return [
