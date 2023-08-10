@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useSearchParams} from '@remix-run/react';
 import {
   Button,
+  ButtonGroup,
   Card,
   HorizontalGrid,
   HorizontalStack,
@@ -14,11 +15,11 @@ import {
   Tooltip,
   VerticalStack,
 } from '@shopify/polaris';
-import {ClipboardMinor, DuplicateMinor} from '@shopify/polaris-icons';
+import {ClipboardMinor, DuplicateMinor, KeyMajor} from '@shopify/polaris-icons';
 import type {LoaderFunction, V2_MetaFunction} from '@remix-run/node';
 
 import {globalTitle} from '~/constant';
-import {generateTOTP, useToast} from '~/utils';
+import {createSecret, generateTOTP, useToast} from '~/utils';
 
 export const meta: V2_MetaFunction<LoaderFunction, {root: LoaderFunction}> = ({matches}) => {
   return [
@@ -72,6 +73,9 @@ export default function OtpCode() {
   );
 
   useEffect(() => {
+    if (!secret) {
+      return handleSecretChange(createSecret());
+    }
     let timeoutId: number;
     function tick() {
       setState(() => {
@@ -94,7 +98,7 @@ export default function OtpCode() {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [secret]);
+  }, [handleSecretChange, secret]);
 
   return (
     <>
@@ -109,9 +113,20 @@ export default function OtpCode() {
                   label="Secret"
                   value={secret}
                   connectedRight={
-                    <Tooltip content="Paste from clipboard">
-                      <Button icon={<Icon source={ClipboardMinor} />} onClick={handleSecretPaste} />
-                    </Tooltip>
+                    <ButtonGroup segmented>
+                      <Tooltip content="Paste from clipboard">
+                        <Button
+                          icon={<Icon source={ClipboardMinor} />}
+                          onClick={handleSecretPaste}
+                        />
+                      </Tooltip>
+                      <Tooltip content="Generate random secret!">
+                        <Button
+                          icon={<Icon source={KeyMajor} />}
+                          onClick={() => handleSecretChange(createSecret())}
+                        />
+                      </Tooltip>
+                    </ButtonGroup>
                   }
                   onChange={handleSecretChange}
                 />
