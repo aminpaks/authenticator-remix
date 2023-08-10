@@ -8,9 +8,9 @@
 
 
 @-webkit-keyframes slide {
-  100% { max-height: 100px; }
+  100% { max-height: 200px; }
 }
 
 @keyframes slide {
-  100% { max-height: 100px; }
+  100% { max-height: 200px; }
 }

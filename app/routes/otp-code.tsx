@@ -1,14 +1,13 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useSearchParams} from '@remix-run/react';
 import {
-  Box,
   Button,
   ButtonGroup,
-  Card,
+  Grid,
   HorizontalGrid,
   HorizontalStack,
   Icon,
-  Layout,
+  LegacyCard,
   Page,
   ProgressBar,
   Text,
@@ -31,9 +30,7 @@ export const meta: V2_MetaFunction = () => {
       name: 'description',
       content: 'Generate a one-time-password code from secrets',
     },
-    {
-      viewport: viewPort,
-    },
+    viewPort,
   ];
 };
 
@@ -117,9 +114,9 @@ export default function OtpCode() {
     <>
       {toastMarkup}
       <Page divider title="One-time-password Code Generator">
-        <Layout>
-          <Layout.Section oneHalf>
-            <Card>
+        <Grid columns={{xs: 1, sm: 1, md: 1, lg: 1, xl: 2}}>
+          <Grid.Cell>
+            <LegacyCard sectioned>
               <VerticalStack gap="4">
                 <TextField
                   autoComplete="off"
@@ -190,20 +187,25 @@ export default function OtpCode() {
                   <ProgressBar size="small" progress={state.progress} />
                 </HorizontalStack>
               </VerticalStack>
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
+            </LegacyCard>
+          </Grid.Cell>
+          <Grid.Cell>
             {state.qrCode ? (
-              <HorizontalStack align="center" blockAlign="center">
-                <Box padding="4">
-                  <Box borderWidth="1" borderColor="border-subdued">
-                    <img style={{display: 'block'}} width={180} src={state.qrCode} alt="QR Code" />
-                  </Box>
-                </Box>
+              <HorizontalStack blockAlign="center">
+                <LegacyCard>
+                  <img
+                    style={{
+                      display: 'block',
+                    }}
+                    width={200}
+                    src={state.qrCode}
+                    alt="QR Code"
+                  />
+                </LegacyCard>
               </HorizontalStack>
             ) : null}
-          </Layout.Section>
-        </Layout>
+          </Grid.Cell>
+        </Grid>
       </Page>
     </>
   );

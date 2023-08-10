@@ -26,7 +26,7 @@ export const links: LinksFunction = () =>
   linkDefinitions.concat(...(cssBundleHref ? [{rel: 'stylesheet', href: cssBundleHref}] : []));
 
 export function meta() {
-  return [{charset: 'utf-8'}, {title: globalTitle}, {viewport: viewPort}];
+  return [{charset: 'utf-8'}, {title: globalTitle}, viewPort];
 }
 
 export default function App() {

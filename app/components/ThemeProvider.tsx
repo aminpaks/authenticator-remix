@@ -1,22 +1,21 @@
 import enTranslations from '@shopify/polaris/locales/en.json';
+import {useState, useCallback, type HTMLProps} from 'react';
 import {Link as RemixLink, useLocation} from '@remix-run/react';
 import {AppProvider, Frame, Navigation, TopBar} from '@shopify/polaris';
 import {ShopcodesMajor, ReferralCodeMajor, CircleInformationMajor} from '@shopify/polaris-icons';
 
-import type {HTMLProps} from 'react';
-
 export function ThemeProvider({children}: {children: React.ReactNode}) {
   const location = useLocation();
-  const logo = {
-    width: 260,
-    topBarSource: '/logo.svg',
-    url: '/',
-    accessibilityLabel: 'Authenticator app',
-  };
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const toggleNavigation = useCallback(
+    () => setIsNavigationOpen((isNavigationOpen) => !isNavigationOpen),
+    [],
+  );
+  const closeNavigation = useCallback(() => setIsNavigationOpen(false), []);
 
-  const topBarMarkup = <TopBar showNavigationToggle />;
+  const topBarMarkup = <TopBar showNavigationToggle onNavigationToggle={toggleNavigation} />;
   const navigationMarkup = (
-    <Navigation location={location.pathname}>
+    <Navigation location={location.pathname} onDismiss={closeNavigation}>
       <Navigation.Section
         items={[
           {
@@ -44,7 +43,14 @@ export function ThemeProvider({children}: {children: React.ReactNode}) {
 
   return (
     <AppProvider i18n={enTranslations} linkComponent={Link}>
-      <Frame logo={logo} topBar={topBarMarkup} navigation={navigationMarkup}>
+      <Frame
+        sidebar
+        logo={logo}
+        topBar={topBarMarkup}
+        navigation={navigationMarkup}
+        showMobileNavigation={isNavigationOpen}
+        onNavigationDismiss={closeNavigation}
+      >
         {children}
       </Frame>
     </AppProvider>
@@ -58,3 +64,10 @@ interface LinkProps extends HTMLProps<HTMLAnchorElement> {
 function Link({ref, url, ...rest}: LinkProps) {
   return <RemixLink to={url} {...rest} />;
 }
+
+const logo = {
+  width: 260,
+  topBarSource: '/logo.svg',
+  url: '/',
+  accessibilityLabel: 'Authenticator app',
+};

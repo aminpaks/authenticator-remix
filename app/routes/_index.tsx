@@ -26,9 +26,7 @@ export const meta: V2_MetaFunction = () => {
       name: 'description',
       content: 'Decode two-step authentication QRCode to discover the secret',
     },
-    {
-      viewport: viewPort,
-    },
+    viewPort,
   ];
 };
 

@@ -1,2 +1,5 @@
 export const globalTitle = 'Authenticator';
-export const viewPort = 'width=device-width, initial-scale=1';
+export const viewPort = {
+  name: 'viewport',
+  content: 'width=device-width, initial-scale=1',
+};
