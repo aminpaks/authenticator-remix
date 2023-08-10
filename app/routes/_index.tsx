@@ -8,7 +8,7 @@ import {useFetcher} from '@remix-run/react';
 import {Bleed, DropZone, LegacyCard, LegacyStack, Page} from '@shopify/polaris';
 import type {V2_MetaFunction} from '@remix-run/node';
 
-import {globalTitle} from '~/constant';
+import {globalTitle, viewPort} from '~/constant';
 import {UploadFiles, type UploadFile} from '~/components';
 import {getRandomName, actionDecodeSecret, mapQRCodeFailures} from '~/utils';
 
@@ -25,6 +25,9 @@ export const meta: V2_MetaFunction = () => {
     {
       name: 'description',
       content: 'Decode two-step authentication QRCode to discover the secret',
+    },
+    {
+      viewport: viewPort,
     },
   ];
 };

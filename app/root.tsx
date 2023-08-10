@@ -12,7 +12,7 @@ import {
 import type {LinksFunction} from '@remix-run/node';
 
 import {ThemeProvider} from '~/components/ThemeProvider';
-import {globalTitle} from '~/constant';
+import {globalTitle, viewPort} from '~/constant';
 
 const linkDefinitions: HtmlLinkDescriptor[] = [
   {rel: 'stylesheet', href: polaris},
@@ -26,11 +26,7 @@ export const links: LinksFunction = () =>
   linkDefinitions.concat(...(cssBundleHref ? [{rel: 'stylesheet', href: cssBundleHref}] : []));
 
 export function meta() {
-  return [
-    {charset: 'utf-8'},
-    {title: globalTitle},
-    {viewport: 'width=device-width,initial-scale=1'},
-  ];
+  return [{charset: 'utf-8'}, {title: globalTitle}, {viewport: viewPort}];
 }
 
 export default function App() {

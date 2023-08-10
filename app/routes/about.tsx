@@ -1,7 +1,7 @@
 import {Link, Page, Text, VerticalStack} from '@shopify/polaris';
 import type {V2_MetaFunction} from '@remix-run/node';
 
-import {globalTitle} from '~/constant';
+import {globalTitle, viewPort} from '~/constant';
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -11,6 +11,9 @@ export const meta: V2_MetaFunction = () => {
     {
       name: 'description',
       content: 'Authenticator app by Amin Pakseresht',
+    },
+    {
+      viewport: viewPort,
     },
   ];
 };

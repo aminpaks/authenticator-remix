@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useSearchParams} from '@remix-run/react';
 import {
+  Box,
   Button,
   ButtonGroup,
   Card,
@@ -16,19 +17,22 @@ import {
   VerticalStack,
 } from '@shopify/polaris';
 import {ClipboardMinor, DuplicateMinor, KeyMajor} from '@shopify/polaris-icons';
-import type {LoaderFunction, V2_MetaFunction} from '@remix-run/node';
+import type {V2_MetaFunction} from '@remix-run/node';
 
-import {globalTitle} from '~/constant';
-import {createSecret, generateTOTP, useToast} from '~/utils';
+import {globalTitle, viewPort} from '~/constant';
+import {createSecret, generateTOTP, useToast, createQRCode, createKeyUri} from '~/utils';
 
-export const meta: V2_MetaFunction<LoaderFunction, {root: LoaderFunction}> = ({matches}) => {
+export const meta: V2_MetaFunction = () => {
   return [
     {
       title: `One-time-password Code Generator | ${globalTitle}`,
     },
     {
       name: 'description',
-      content: 'One-time-password Code Generator from secrets',
+      content: 'Generate a one-time-password code from secrets',
+    },
+    {
+      viewport: viewPort,
     },
   ];
 };
@@ -38,6 +42,7 @@ interface State {
   nextToken: string;
   progress: number;
   nextIn: string;
+  qrCode: string;
 }
 
 export default function OtpCode() {
@@ -49,6 +54,7 @@ export default function OtpCode() {
     nextToken: '',
     progress: 0,
     nextIn: '30',
+    qrCode: '',
   });
 
   const handleSecretChange = useCallback(
@@ -76,9 +82,15 @@ export default function OtpCode() {
     if (!secret) {
       return handleSecretChange(createSecret());
     }
+    if (secret) {
+      createQRCode({text: createKeyUri({secret})}).then((qrCode) =>
+        setState((state) => ({...state, qrCode})),
+      );
+    }
+
     let timeoutId: number;
     function tick() {
-      setState(() => {
+      setState(({qrCode}) => {
         const interval = (Date.now() / 1000) % 30;
         const progress = Number(((interval / 30) * 100).toFixed(1));
         const nextIn = String(Math.ceil(30 - interval));
@@ -90,6 +102,7 @@ export default function OtpCode() {
           nextToken,
           progress,
           nextIn,
+          qrCode,
         };
       });
       timeoutId = window.setTimeout(tick, 50);
@@ -179,7 +192,17 @@ export default function OtpCode() {
               </VerticalStack>
             </Card>
           </Layout.Section>
-          <Layout.Section oneHalf />
+          <Layout.Section oneHalf>
+            {state.qrCode ? (
+              <HorizontalStack align="center" blockAlign="center">
+                <Box padding="4">
+                  <Box borderWidth="1" borderColor="border-subdued">
+                    <img style={{display: 'block'}} width={180} src={state.qrCode} alt="QR Code" />
+                  </Box>
+                </Box>
+              </HorizontalStack>
+            ) : null}
+          </Layout.Section>
         </Layout>
       </Page>
     </>
